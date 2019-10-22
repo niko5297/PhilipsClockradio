@@ -2,13 +2,18 @@ package dk.dtu.philipsclockradio;
 
 public class StateRadio extends StateAdapter {
 
+    public static int radioType = 1;
     StateRadio(){}
 
 
     @Override
     public void onEnterState(ContextClockradio context) {
         context.ui.toggleRadioPlaying();
-        context.ui.turnOnLED(1);
+        if (radioType==1) {
+            context.ui.turnOnLED(1);
+        }
+        else
+            context.ui.turnOnLED(4);
 
     }
 
@@ -26,6 +31,11 @@ public class StateRadio extends StateAdapter {
 
     @Override
     public void onClick_Power(ContextClockradio context) {
+        if (radioType==1){
+            context.ui.turnOffLED(1);
+            context.ui.turnOnLED(4);
+            radioType=4;
+        }
     }
 
     @Override
