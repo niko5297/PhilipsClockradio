@@ -103,6 +103,7 @@ public class StateRadio extends StateAdapter {
     /**
      * Husk at tage højde for antallet af elementer i arrayet.
      * Dette kan gøres ved at når i==max, så sæt i=0 og omvendt for modsat søgning.
+     * Brug Math.round() til double problemet (lægge 0.1 til frekvensen)
      * @param context
      */
     @Override
