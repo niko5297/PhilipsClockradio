@@ -102,6 +102,7 @@ public class StateRadio extends StateAdapter {
 
     /**
      * Husk at tage højde for antallet af elementer i arrayet.
+     * Dette kan gøres ved at når i==max, så sæt i=0 og omvendt for modsat søgning.
      * @param context
      */
     @Override
