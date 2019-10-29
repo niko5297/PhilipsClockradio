@@ -8,6 +8,8 @@ public class StateStandby extends StateAdapter {
     private Date mTime;
     private static Handler mHandler = new Handler();
     private ContextClockradio mContext;
+    private boolean isAlarm1 = false;
+    private boolean isAlarm2 = false;
 
     StateStandby(Date time){
         mTime = time;
@@ -71,21 +73,38 @@ public class StateStandby extends StateAdapter {
     public void onLongClick_AL1(ContextClockradio context) {
         stopClock();
         context.setState(new StateAlarm(1));
+        isAlarm1=true;
+
     }
 
     @Override
     public void onLongClick_AL2(ContextClockradio context) {
         stopClock();
         context.setState(new StateAlarm(2));
+        isAlarm2=true;
     }
 
     @Override
     public void onClick_AL1(ContextClockradio context) {
-
+        if (isAlarm1){
+            context.ui.turnOffLED(2);
+            isAlarm1=false;
+        }
+        else {
+            context.ui.turnOnLED(2);
+            isAlarm1=true;
+        }
     }
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
-
+        if (isAlarm2){
+            context.ui.turnOffLED(5);
+            isAlarm2=false;
+        }
+        else {
+            context.ui.turnOnLED(5);
+            isAlarm2=true;
+        }
     }
 }
