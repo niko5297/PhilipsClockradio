@@ -8,7 +8,6 @@ import java.util.Arrays;
 public class StateRadio extends StateAdapter {
 
     //TODO: AM impl.
-    //TODO: Gem radiokanaler og smid dem ind i et array
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
@@ -17,6 +16,7 @@ public class StateRadio extends StateAdapter {
     public static double nuværendeFrekvens = 90.1;
     public static int stationsNummer=1;
     public static boolean radiokanal = false;
+    public static double[] gemteKanaler;
     private double[] radioKanaler = {101.5,97.0,103.2,102.7,99.4,106.6,90.1,105,100.6,97.7,107.2,107.6,96.1};
 
     StateRadio(){}
@@ -164,6 +164,9 @@ public class StateRadio extends StateAdapter {
                 context.ui.setDisplayText(stationsNummer +"");
                 context.ui.turnOnTextBlink();
                 stationsNummer++;
+                if (stationsNummer>7){
+                    stationsNummer=1;
+                }
                 break;
             }
         }
@@ -175,6 +178,7 @@ public class StateRadio extends StateAdapter {
         if (radiokanal){
             context.ui.setDisplayText(nuværendeFrekvens+"");
             context.ui.turnOffTextBlink();
+            gemteKanaler[stationsNummer] = nuværendeFrekvens;
             stationsNummer=1;
         }
     }
