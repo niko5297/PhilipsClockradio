@@ -4,11 +4,16 @@ import java.util.Date;
 
 public class StateAlarm extends StateAdapter {
 
-    Date mTime;
+    Date time;
     public int alarm;
 
 
     //TODO: Få alarm til at fungere mht. tiden. Den opdatere den nuværende tid, hvilket den ikke skal.
+
+    /**
+     * Brug stopwatch. StateAlarm skal køre på en thread lige som Standby, som konstant opdatere tiden.
+     * @param alarm
+     */
 
     StateAlarm(int alarm){
         this.alarm=alarm;
@@ -22,7 +27,7 @@ public class StateAlarm extends StateAdapter {
         }
         else
             context.ui.turnOnLED(5);
-        mTime = context.getTime();
+        time = context.getTime();
     }
 
     @Override
@@ -31,13 +36,13 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onClick_Min(ContextClockradio context) {
-        mTime.setTime(mTime.getTime() + 60000);
+        time.setTime(time.getTime() + 60000);
     }
 
     @Override
     public void onClick_Hour(ContextClockradio context) {
-        mTime.setTime(mTime.getTime() + 3600000);
-        System.out.println(mTime);
+        time.setTime(time.getTime() + 3600000);
+        System.out.println(time);
     }
 
     @Override
@@ -51,4 +56,6 @@ public class StateAlarm extends StateAdapter {
         context.setState(new StateStandby(context.getTime()));
 
     }
+
+
 }
