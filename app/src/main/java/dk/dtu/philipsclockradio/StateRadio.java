@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class StateRadio extends StateAdapter {
 
-    //TODO: implementer søgning af radiokanaler. Ved langt klik, skal man komme frem til den næste radiokanal
+    //TODO: AM impl.
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
@@ -117,10 +117,6 @@ public class StateRadio extends StateAdapter {
         }
     }
 
-    /**
-     * Brug Math.round() til double problemet (lægge 0.1 til frekvensen)
-     * @param context
-     */
     @Override
     public void onLongClick_Min(ContextClockradio context) {
         double distance = Math.abs(radioKanaler[0] - nuværendeFrekvens);
