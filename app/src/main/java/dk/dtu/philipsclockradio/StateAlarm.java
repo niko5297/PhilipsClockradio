@@ -1,5 +1,8 @@
 package dk.dtu.philipsclockradio;
 
+import android.os.Handler;
+import android.os.health.SystemHealthManager;
+
 import java.util.Date;
 
 public class StateAlarm extends StateAdapter {
@@ -8,10 +11,12 @@ public class StateAlarm extends StateAdapter {
     public int alarm;
 
 
+
+
     //TODO: Få alarm til at fungere mht. tiden. Den opdatere den nuværende tid, hvilket den ikke skal.
 
     /**
-     * Brug stopwatch. StateAlarm skal køre på en thread lige som Standby, som konstant opdatere tiden.
+     *
      * @param alarm
      */
 
@@ -19,15 +24,14 @@ public class StateAlarm extends StateAdapter {
         this.alarm=alarm;
     }
 
-
     @Override
     public void onEnterState(ContextClockradio context) {
         if (alarm==1){
-            context.ui.turnOnLED(1);
+            context.ui.turnOnLED(2);
         }
         else
             context.ui.turnOnLED(5);
-        time = context.getTime();
+        //time = context.getTime();
     }
 
     @Override
@@ -47,7 +51,6 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onClick_AL1(ContextClockradio context) {
-        System.out.println(context.getTime());
         context.setState(new StateStandby(context.getTime()));
     }
 
