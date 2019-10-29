@@ -1,6 +1,10 @@
 package dk.dtu.philipsclockradio;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class StateRadio extends StateAdapter {
 
@@ -24,8 +28,10 @@ public class StateRadio extends StateAdapter {
             context.ui.turnOnLED(1);
             context.ui.setDisplayText(nuværendeFrekvens+"");
         }
-        else
+        else {
             context.ui.turnOnLED(4);
+            context.ui.setDisplayText(nuværendeFrekvens + "");
+        }
 
     }
 
@@ -51,25 +57,16 @@ public class StateRadio extends StateAdapter {
         else {
             context.ui.turnOnLED(1);
             context.ui.turnOffLED(4);
+            radioType=1;
         }
     }
 
     @Override
     public void onClick_Min(ContextClockradio context) {
         if (radioType==1){
-            double a = 1.0;
-            double b = 0.10;
-            double x = 9 * b;
-            a = a - (x);
-
-    /* We use Math.round() function to round the answer to
-         closest long, then we multiply and divide by 1.0 to
-         to set the decimal places to 1 place (this can be done
-         according to the requirements.*/
-            System.out.println(a);
-            System.out.println("a = " + Math.round(a*1.0)/1.0);
-            nuværendeFrekvens = nuværendeFrekvens+Math.round(a*1.0)/1.0;
-            System.out.println(nuværendeFrekvens);
+            BigDecimal tempBig = new BigDecimal(0.1);
+            nuværendeFrekvens = nuværendeFrekvens+tempBig.doubleValue();
+            nuværendeFrekvens = Double.parseDouble(format(nuværendeFrekvens));
             context.ui.setDisplayText(nuværendeFrekvens+"");
         }
         if (radioType==4){
@@ -80,18 +77,9 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onClick_Hour(ContextClockradio context) {
         if (radioType==1){
-            double a = 1.0;
-            double b = 0.10;
-            double x = 9 * b;
-            a = a - (x);
-
-    /* We use Math.round() function to round the answer to
-         closest long, then we multiply and divide by 1.0 to
-         to set the decimal places to 1 place (this can be done
-         according to the requirements.*/
-            System.out.println("a = " + Math.round(a*1.0)/1.0);
-            nuværendeFrekvens = nuværendeFrekvens-Math.round(a*1.0)/1.0;
-            System.out.println(nuværendeFrekvens);
+            BigDecimal tempBig = new BigDecimal(0.1);
+            nuværendeFrekvens = nuværendeFrekvens-tempBig.doubleValue();
+            nuværendeFrekvens = Double.parseDouble(format(nuværendeFrekvens));
             context.ui.setDisplayText(nuværendeFrekvens+"");
         }
         if (radioType==4){
@@ -113,7 +101,7 @@ public class StateRadio extends StateAdapter {
                     distance = cdistance;
                 }
             }
-            if (nuværendeFrekvens == radioKanaler[idx]) {
+            if (nuværendeFrekvens == radioKanaler[idx] || nuværendeFrekvens<radioKanaler[idx]) {
                 if (idx - 1 <0) {
                     nuværendeFrekvens = radioKanaler[12];
                 } else
@@ -147,7 +135,7 @@ public class StateRadio extends StateAdapter {
                     distance = cdistance;
                 }
             }
-            if (nuværendeFrekvens==radioKanaler[idx]){
+            if (nuværendeFrekvens==radioKanaler[idx] || nuværendeFrekvens>radioKanaler[idx]){
                 if (idx+1>radioKanaler.length-1){
                     nuværendeFrekvens=radioKanaler[0];
                 }
@@ -164,4 +152,19 @@ public class StateRadio extends StateAdapter {
 
         }
     }
+    private static String format(double value) {
+
+        NumberFormat format = NumberFormat.getInstance();
+
+        format.setMinimumFractionDigits(1);
+
+        format.setMaximumFractionDigits(2);
+
+        format.setRoundingMode(RoundingMode.HALF_EVEN);
+
+        return format.format(value);
+
+    }
+
+
 }
