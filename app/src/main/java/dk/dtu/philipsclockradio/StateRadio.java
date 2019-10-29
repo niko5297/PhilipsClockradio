@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class StateRadio extends StateAdapter {
 
     //TODO: AM impl.
+    //TODO: Gem radiokanaler og smid dem ind i et array
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
