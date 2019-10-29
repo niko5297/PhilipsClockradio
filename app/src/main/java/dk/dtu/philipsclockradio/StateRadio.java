@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Locale;
 
 public class StateRadio extends StateAdapter {
 
@@ -15,6 +14,8 @@ public class StateRadio extends StateAdapter {
 
     public static int radioType = 1;
     public static double nuværendeFrekvens = 90.1;
+    public static int stationsNummer=1;
+    public static boolean radiokanal = false;
     private double[] radioKanaler = {101.5,97.0,103.2,102.7,99.4,106.6,90.1,105,100.6,97.7,107.2,107.6,96.1};
 
     StateRadio(){}
@@ -148,6 +149,35 @@ public class StateRadio extends StateAdapter {
 
         }
     }
+
+    @Override
+    public void onLongClick_Preset(ContextClockradio context) {
+        for (int i = 0; i<radioKanaler.length; i++){
+            if (nuværendeFrekvens==radioKanaler[i]){
+                radiokanal = true;
+            }
+            else
+                radiokanal = false;
+
+            if (radiokanal){
+                context.ui.setDisplayText(stationsNummer +"");
+                context.ui.turnOnTextBlink();
+                stationsNummer++;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onClick_Preset(ContextClockradio context) {
+
+        if (radiokanal){
+            context.ui.setDisplayText(nuværendeFrekvens+"");
+            context.ui.turnOffTextBlink();
+            stationsNummer=1;
+        }
+    }
+
     private static String format(double value) {
 
         NumberFormat format = NumberFormat.getInstance();
