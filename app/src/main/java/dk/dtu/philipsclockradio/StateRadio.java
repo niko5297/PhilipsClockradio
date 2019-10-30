@@ -27,11 +27,9 @@ public class StateRadio extends StateAdapter {
         Arrays.sort(radioKanaler);
         context.ui.toggleRadioPlaying();
         if (radioType==1) {
-            context.ui.turnOnLED(1);
             context.ui.setDisplayText(nuværendeFrekvens+"");
         }
         else {
-            context.ui.turnOnLED(4);
             context.ui.setDisplayText(nuværendeFrekvens + "");
         }
 
@@ -40,8 +38,6 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onExitState(ContextClockradio context) {
         context.ui.toggleRadioPlaying();
-        context.ui.turnOffLED(1);
-        context.ui.turnOffLED(4);
     }
 
     @Override
@@ -52,13 +48,9 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onClick_Power(ContextClockradio context) {
         if (radioType==1){
-            context.ui.turnOffLED(1);
-            context.ui.turnOnLED(4);
             radioType=4;
         }
         else {
-            context.ui.turnOnLED(1);
-            context.ui.turnOffLED(4);
             radioType=1;
         }
     }
@@ -69,6 +61,10 @@ public class StateRadio extends StateAdapter {
             BigDecimal tempBig = new BigDecimal(0.1);
             nuværendeFrekvens = nuværendeFrekvens+tempBig.doubleValue();
             nuværendeFrekvens = Double.parseDouble(format(nuværendeFrekvens));
+
+            if (nuværendeFrekvens>107.6){
+                nuværendeFrekvens=90.1;
+            }
             context.ui.setDisplayText(nuværendeFrekvens+"");
         }
         if (radioType==4){
@@ -82,6 +78,10 @@ public class StateRadio extends StateAdapter {
             BigDecimal tempBig = new BigDecimal(0.1);
             nuværendeFrekvens = nuværendeFrekvens-tempBig.doubleValue();
             nuværendeFrekvens = Double.parseDouble(format(nuværendeFrekvens));
+
+            if(nuværendeFrekvens<90.1){
+                nuværendeFrekvens=107.6;
+            }
             context.ui.setDisplayText(nuværendeFrekvens+"");
         }
         if (radioType==4){
