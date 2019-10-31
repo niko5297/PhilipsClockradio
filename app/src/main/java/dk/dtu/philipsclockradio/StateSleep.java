@@ -6,14 +6,17 @@ import android.os.Message;
 
 public class StateSleep extends StateAdapter {
 
-    public static int[] sleepTime = {120,90,60,30,15};
-    public static int counter;
+    private static int[] sleepTime = {120,90,60,30,15};
+    private static int counter;
     private ContextClockradio mContext;
-    public static long currentTime;
-    public static long differenceTime;
+    private static long currentTime;
+    private static long differenceTime;
     private static Handler mHandler = new Handler();
     private Message message;
     private boolean isSleepActive;
+
+    //TODO: Forbedre kode
+
 
     StateSleep(){}
 
@@ -79,7 +82,7 @@ public class StateSleep extends StateAdapter {
 
         if (slutning){
             context.ui.turnOffLED(3);
-            context.setState(new StateStandby(context.getTime()));
+            context.ui.setDisplayText("OFF");
         }
 
     }

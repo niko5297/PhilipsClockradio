@@ -1,21 +1,18 @@
 package dk.dtu.philipsclockradio;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class StateAlarm extends StateAdapter {
 
-    Date time;
-    public int alarm;
+    private Date time = new Date();
+    private String mDisplayText;
+    private static Date[] alarmArray = new Date[2];
+    private static boolean alarm1IsSet, alarm2IsSet;
+    private int alarm;
 
+    //TODO: Forbedre kode
 
-
-
-    //TODO: Få alarm til at fungere mht. tiden. Den opdatere den nuværende tid, hvilket den ikke skal.
-
-    /**
-     *
-     * @param alarm
-     */
 
     StateAlarm(int alarm){
         this.alarm=alarm;
@@ -23,12 +20,32 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onEnterState(ContextClockradio context) {
+        time = resetTime(time);
+        mDisplayText = time.toString().substring(11,16);
+        context.ui.setDisplayText(mDisplayText);
         if (alarm==1){
             context.ui.turnOnLED(2);
+
+            try {
+                if (alarmArray[0] != null) {
+                    context.ui.setDisplayText(alarmArray[0].toString().substring(11, 16));
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
         }
-        else
+        else {
             context.ui.turnOnLED(5);
-        //time = context.getTime();
+
+            try {
+
+                if (alarmArray[1] != null) {
+                    context.ui.setDisplayText(alarmArray[1].toString().substring(11, 16));
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -37,24 +54,94 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onClick_Min(ContextClockradio context) {
-        time.setTime(time.getTime() + 60000);
+        if (alarm==1) {
+            if (alarm1IsSet){
+                alarmArray[0].setTime(alarmArray[0].getTime()+ 60000);
+                mDisplayText = alarmArray[0].toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+            }
+            else {
+                time.setTime(time.getTime() + 60000);
+                mDisplayText = time.toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+                alarmArray[0] = time;
+            }
+        }
+        else {
+            if (alarm2IsSet){
+                alarmArray[1].setTime(alarmArray[1].getTime()+ 60000);
+                mDisplayText = alarmArray[1].toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+            }
+            else {
+                time.setTime(time.getTime() + 60000);
+                mDisplayText = time.toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+                alarmArray[1] = time;
+            }
+        }
     }
 
     @Override
     public void onClick_Hour(ContextClockradio context) {
-        time.setTime(time.getTime() + 3600000);
-        System.out.println(time);
+        if (alarm==1) {
+            if (alarm1IsSet){
+                alarmArray[0].setTime(alarmArray[0].getTime()+ 3600000);
+                mDisplayText = alarmArray[0].toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+            }
+            else {
+                time.setTime(time.getTime() + 3600000);
+                mDisplayText = time.toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+                alarmArray[0] = time;
+            }
+        }
+        else {
+            if (alarm2IsSet){
+                alarmArray[1].setTime(alarmArray[1].getTime()+ 3600000);
+                mDisplayText = alarmArray[1].toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+            }
+            else {
+                time.setTime(time.getTime() + 3600000);
+                mDisplayText = time.toString().substring(11, 16);
+                context.ui.setDisplayText(mDisplayText);
+                alarmArray[1] = time;
+            }
+        }
+
+        //mContext.updateDisplayTime();
     }
 
     @Override
     public void onClick_AL1(ContextClockradio context) {
+        alarm1IsSet =true;
         context.setState(new StateStandby(context.getTime()));
     }
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
+        alarm2IsSet =true;
         context.setState(new StateStandby(context.getTime()));
 
+    }
+
+
+
+
+
+    /*
+    --------------------------------SUPPORT METHODS------------------------------
+     */
+
+    private Date resetTime(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        return cal.getTime();
     }
 
 

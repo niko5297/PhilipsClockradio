@@ -8,15 +8,18 @@ import java.util.Arrays;
 public class StateRadio extends StateAdapter {
 
     //TODO: AM impl.
+    //TODO: Forbedre kode
+
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
 
-    public static int radioType = 1;
-    public static double nuværendeFrekvens = 90.1;
-    public static int stationsNummer=1;
-    public static boolean radiokanal = false;
-    public static double[] gemteKanaler;
+    private static int radioType = 1;
+    private static double nuværendeFMFrekvens = 90.1;
+    private static double nuværendeAMFrekvens = 0;
+    private static int stationsNummer=1;
+    private static boolean radiokanal = false;
+    private static double[] gemteKanaler;
     private double[] radioKanaler = {101.5,97.0,103.2,102.7,99.4,106.6,90.1,105,100.6,97.7,107.2,107.6,96.1};
 
     StateRadio(){}
@@ -27,10 +30,10 @@ public class StateRadio extends StateAdapter {
         Arrays.sort(radioKanaler);
         context.ui.toggleRadioPlaying();
         if (radioType==1) {
-            context.ui.setDisplayText(nuværendeFrekvens+"");
+            context.ui.setDisplayText(nuværendeFMFrekvens +"");
         }
         else {
-            context.ui.setDisplayText(nuværendeFrekvens + "");
+            context.ui.setDisplayText(nuværendeFMFrekvens + "");
         }
 
     }
@@ -59,13 +62,13 @@ public class StateRadio extends StateAdapter {
     public void onClick_Min(ContextClockradio context) {
         if (radioType==1){
             BigDecimal tempBig = new BigDecimal(0.1);
-            nuværendeFrekvens = nuværendeFrekvens+tempBig.doubleValue();
-            nuværendeFrekvens = Double.parseDouble(format(nuværendeFrekvens));
+            nuværendeFMFrekvens = nuværendeFMFrekvens +tempBig.doubleValue();
+            nuværendeFMFrekvens = Double.parseDouble(format(nuværendeFMFrekvens));
 
-            if (nuværendeFrekvens>107.6){
-                nuværendeFrekvens=90.1;
+            if (nuværendeFMFrekvens >107.6){
+                nuværendeFMFrekvens =90.1;
             }
-            context.ui.setDisplayText(nuværendeFrekvens+"");
+            context.ui.setDisplayText(nuværendeFMFrekvens +"");
         }
         if (radioType==4){
 
@@ -76,13 +79,13 @@ public class StateRadio extends StateAdapter {
     public void onClick_Hour(ContextClockradio context) {
         if (radioType==1){
             BigDecimal tempBig = new BigDecimal(0.1);
-            nuværendeFrekvens = nuværendeFrekvens-tempBig.doubleValue();
-            nuværendeFrekvens = Double.parseDouble(format(nuværendeFrekvens));
+            nuværendeFMFrekvens = nuværendeFMFrekvens -tempBig.doubleValue();
+            nuværendeFMFrekvens = Double.parseDouble(format(nuværendeFMFrekvens));
 
-            if(nuværendeFrekvens<90.1){
-                nuværendeFrekvens=107.6;
+            if(nuværendeFMFrekvens <90.1){
+                nuværendeFMFrekvens =107.6;
             }
-            context.ui.setDisplayText(nuværendeFrekvens+"");
+            context.ui.setDisplayText(nuværendeFMFrekvens +"");
         }
         if (radioType==4){
 
@@ -91,28 +94,28 @@ public class StateRadio extends StateAdapter {
 
     @Override
     public void onLongClick_Hour(ContextClockradio context) {
-        double distance = Math.abs(radioKanaler[0] - nuværendeFrekvens);
+        double distance = Math.abs(radioKanaler[0] - nuværendeFMFrekvens);
         int idx = 0;
         double theNumber = radioKanaler[idx];
         System.out.println(theNumber);
         if (radioType==1) {
             for (int c = 0; c < radioKanaler.length; c++) {
-                double cdistance = Math.abs(radioKanaler[c] - nuværendeFrekvens);
+                double cdistance = Math.abs(radioKanaler[c] - nuværendeFMFrekvens);
                 if (cdistance < distance) {
                     idx = c;
                     distance = cdistance;
                 }
             }
-            if (nuværendeFrekvens == radioKanaler[idx] || nuværendeFrekvens<radioKanaler[idx]) {
+            if (nuværendeFMFrekvens == radioKanaler[idx] || nuværendeFMFrekvens <radioKanaler[idx]) {
                 if (idx - 1 <0) {
-                    nuværendeFrekvens = radioKanaler[12];
+                    nuværendeFMFrekvens = radioKanaler[12];
                 } else
-                    nuværendeFrekvens = radioKanaler[idx - 1];
+                    nuværendeFMFrekvens = radioKanaler[idx - 1];
 
             } else
-                nuværendeFrekvens = radioKanaler[idx];
+                nuværendeFMFrekvens = radioKanaler[idx];
 
-            context.ui.setDisplayText(nuværendeFrekvens + "");
+            context.ui.setDisplayText(nuværendeFMFrekvens + "");
         }
         if (radioType==4){
 
@@ -121,30 +124,30 @@ public class StateRadio extends StateAdapter {
 
     @Override
     public void onLongClick_Min(ContextClockradio context) {
-        double distance = Math.abs(radioKanaler[0] - nuværendeFrekvens);
+        double distance = Math.abs(radioKanaler[0] - nuværendeFMFrekvens);
         int idx = 0;
         double theNumber = radioKanaler[idx];
         System.out.println(theNumber);
         if (radioType==1){
             for(int c = 0; c < radioKanaler.length; c++){
-                double cdistance = Math.abs(radioKanaler[c] - nuværendeFrekvens);
+                double cdistance = Math.abs(radioKanaler[c] - nuværendeFMFrekvens);
                 if(cdistance < distance){
                     idx = c;
                     distance = cdistance;
                 }
             }
-            if (nuværendeFrekvens==radioKanaler[idx] || nuværendeFrekvens>radioKanaler[idx]){
+            if (nuværendeFMFrekvens ==radioKanaler[idx] || nuværendeFMFrekvens >radioKanaler[idx]){
                 if (idx+1>radioKanaler.length-1){
-                    nuværendeFrekvens=radioKanaler[0];
+                    nuværendeFMFrekvens =radioKanaler[0];
                 }
                 else
-                    nuværendeFrekvens=radioKanaler[idx+1];
+                    nuværendeFMFrekvens =radioKanaler[idx+1];
 
             }
             else
-            nuværendeFrekvens = radioKanaler[idx];
+            nuværendeFMFrekvens = radioKanaler[idx];
 
-            context.ui.setDisplayText(nuværendeFrekvens+"");
+            context.ui.setDisplayText(nuværendeFMFrekvens +"");
         }
         if (radioType==4){
 
@@ -154,7 +157,7 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onLongClick_Preset(ContextClockradio context) {
         for (int i = 0; i<radioKanaler.length; i++){
-            if (nuværendeFrekvens==radioKanaler[i]){
+            if (nuværendeFMFrekvens ==radioKanaler[i]){
                 radiokanal = true;
             }
             else
@@ -176,12 +179,22 @@ public class StateRadio extends StateAdapter {
     public void onClick_Preset(ContextClockradio context) {
 
         if (radiokanal){
-            context.ui.setDisplayText(nuværendeFrekvens+"");
+            context.ui.setDisplayText(nuværendeFMFrekvens +"");
             context.ui.turnOffTextBlink();
-            gemteKanaler[stationsNummer] = nuværendeFrekvens;
+            gemteKanaler[stationsNummer-1] = nuværendeFMFrekvens;
             stationsNummer=1;
         }
     }
+
+
+
+
+
+
+
+    /*
+    --------------------------------SUPPORT METHODS------------------------------
+     */
 
     private static String format(double value) {
 
