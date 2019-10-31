@@ -112,4 +112,10 @@ public class StateStandby extends StateAdapter {
             isAlarm2=true;
         }
     }
+
+    @Override
+    public void onClick_Snooze(ContextClockradio context) {
+        stopClock();
+        context.setState(new StateSnooze());
+    }
 }
