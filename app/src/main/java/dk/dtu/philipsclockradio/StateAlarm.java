@@ -1,8 +1,5 @@
 package dk.dtu.philipsclockradio;
 
-import android.os.Handler;
-import android.os.health.SystemHealthManager;
-
 import java.util.Date;
 
 public class StateAlarm extends StateAdapter {

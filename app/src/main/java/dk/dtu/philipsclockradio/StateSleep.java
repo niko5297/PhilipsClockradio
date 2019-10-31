@@ -1,6 +1,8 @@
 package dk.dtu.philipsclockradio;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 
 public class StateSleep extends StateAdapter {
 
@@ -10,6 +12,8 @@ public class StateSleep extends StateAdapter {
     public static long currentTime;
     public static long differenceTime;
     private static Handler mHandler = new Handler();
+    private Message message;
+    private boolean isSleepActive;
 
     StateSleep(){}
 
@@ -20,9 +24,11 @@ public class StateSleep extends StateAdapter {
         public void run() {
             try {
                 differenceTime=System.currentTimeMillis();
-                System.out.println(differenceTime);
-                if (currentTime+5000<differenceTime){
-                    System.out.println("Du er nået hertil");
+                //System.out.println(differenceTime);
+                if (currentTime+5000<differenceTime && !isSleepActive){
+                    //System.out.println("Du er nået hertil");
+                    mContext.setState(new StateStandby(mContext.getTime()));
+                    isSleepActive=true;
                 }
 
             } finally {
@@ -36,17 +42,21 @@ public class StateSleep extends StateAdapter {
 
     @Override
     public void onEnterState(ContextClockradio context) {
+        mContext = context;
+        isSleepActive=false;
         context.ui.turnOnLED(3);
         context.ui.setDisplayText(sleepTime[0]+"");
         currentTime = System.currentTimeMillis();
         differenceTime = System.currentTimeMillis();
-        System.out.println(currentTime);
+        //System.out.println(currentTime);
         mTime.run();
     }
 
     @Override
     public void onExitState(ContextClockradio context) {
-        context.ui.turnOffLED(3);
+        mHandler.removeCallbacks(mTime);
+        //mHandler.sendMessage(message);
+        //System.out.println(message);
     }
 
     @Override
@@ -62,8 +72,13 @@ public class StateSleep extends StateAdapter {
             counter++;
 
         context.ui.setDisplayText(sleepTime[counter]+"");
+        message= mHandler.obtainMessage();
+        Bundle bundle = new Bundle();
+        bundle.putInt(String.valueOf(0),sleepTime[counter]);
+        message.setData(bundle);
 
         if (slutning){
+            context.ui.turnOffLED(3);
             context.setState(new StateStandby(context.getTime()));
         }
 
