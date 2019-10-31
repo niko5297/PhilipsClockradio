@@ -7,7 +7,7 @@ public class StateAlarm extends StateAdapter {
 
     private Date time = new Date();
     private String mDisplayText;
-    private static Date[] alarmArray = new Date[2];
+    public static Date[] alarmArray = new Date[2];
     private static boolean alarm1IsSet, alarm2IsSet;
     private int alarm;
 
@@ -125,6 +125,16 @@ public class StateAlarm extends StateAdapter {
         alarm2IsSet =true;
         context.setState(new StateStandby(context.getTime()));
 
+    }
+
+    public Date getAlarmTime(){
+        if (alarm1IsSet){
+            return alarmArray[0];
+        }
+        if (alarm2IsSet){
+            return alarmArray[1];
+        }
+        return null;
     }
 
 
