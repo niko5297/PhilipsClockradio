@@ -1,5 +1,7 @@
 package dk.dtu.philipsclockradio;
 
+import android.content.res.Resources;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -7,20 +9,20 @@ import java.util.Arrays;
 
 public class StateRadio extends StateAdapter {
 
-    //TODO: AM impl.
     //TODO: Forbedre kode
 
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
 
-    private static int radioType = 1;
-    private static double nuværendeFMFrekvens = 90.1;
-    private static double nuværendeAMFrekvens = 0;
-    private static int stationsNummer=1;
-    private static boolean radiokanal = false;
-    private static double[] gemteKanaler;
+    private int radioType = 1;
+    private double nuværendeFMFrekvens = 90.1;
+    private double nuværendeAMFrekvens = 0;
+    private int stationsNummer=1;
+    private boolean radiokanal = false;
+    private double[] gemteKanaler = {25.1,97.5,85.2,90.5,101.8,50.2,60.6,79.2,30.2,75.2,65.3,44.3,99.3,76.5,88.8,55.3,43.6,78.3,66.6,44.1};
     private double[] radioKanaler = {101.5,97.0,103.2,102.7,99.4,106.6,90.1,105,100.6,97.7,107.2,107.6,96.1};
+    private boolean isRadioPlaying = true;
 
     StateRadio(){}
 
@@ -96,8 +98,6 @@ public class StateRadio extends StateAdapter {
     public void onLongClick_Hour(ContextClockradio context) {
         double distance = Math.abs(radioKanaler[0] - nuværendeFMFrekvens);
         int idx = 0;
-        double theNumber = radioKanaler[idx];
-        System.out.println(theNumber);
         if (radioType==1) {
             for (int c = 0; c < radioKanaler.length; c++) {
                 double cdistance = Math.abs(radioKanaler[c] - nuværendeFMFrekvens);
@@ -126,8 +126,6 @@ public class StateRadio extends StateAdapter {
     public void onLongClick_Min(ContextClockradio context) {
         double distance = Math.abs(radioKanaler[0] - nuværendeFMFrekvens);
         int idx = 0;
-        double theNumber = radioKanaler[idx];
-        System.out.println(theNumber);
         if (radioType==1){
             for(int c = 0; c < radioKanaler.length; c++){
                 double cdistance = Math.abs(radioKanaler[c] - nuværendeFMFrekvens);
@@ -156,6 +154,11 @@ public class StateRadio extends StateAdapter {
 
     @Override
     public void onLongClick_Preset(ContextClockradio context) {
+        if (isRadioPlaying){
+            stationsNummer=1;
+        }
+        isRadioPlaying = false;
+
         for (int i = 0; i<radioKanaler.length; i++){
             if (nuværendeFMFrekvens ==radioKanaler[i]){
                 radiokanal = true;
@@ -167,7 +170,7 @@ public class StateRadio extends StateAdapter {
                 context.ui.setDisplayText(stationsNummer +"");
                 context.ui.turnOnTextBlink();
                 stationsNummer++;
-                if (stationsNummer>7){
+                if (stationsNummer>20){
                     stationsNummer=1;
                 }
                 break;
@@ -178,13 +181,30 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onClick_Preset(ContextClockradio context) {
 
-        if (radiokanal){
+
+        if (isRadioPlaying&&stationsNummer<=20) {
+            if (gemteKanaler[stationsNummer - 1] != 0) {
+                nuværendeFMFrekvens = gemteKanaler[stationsNummer - 1];
+            } else
+                nuværendeFMFrekvens = 0;
+
+            context.ui.setDisplayText(nuværendeFMFrekvens + "");
+
+            stationsNummer++;
+        }
+        else stationsNummer=1;
+
+
+        if (radiokanal && isRadioPlaying==false){
             context.ui.setDisplayText(nuværendeFMFrekvens +"");
             context.ui.turnOffTextBlink();
             gemteKanaler[stationsNummer-1] = nuværendeFMFrekvens;
             stationsNummer=1;
+            isRadioPlaying = true;
         }
-    }
+
+        }
+
 
 
 

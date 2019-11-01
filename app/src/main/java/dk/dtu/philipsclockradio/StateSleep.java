@@ -12,7 +12,6 @@ public class StateSleep extends StateAdapter {
     private static long currentTime;
     private static long differenceTime;
     private static Handler mHandler = new Handler();
-    private Message message;
     private boolean isSleepActive;
 
     //TODO: Forbedre kode
@@ -75,10 +74,6 @@ public class StateSleep extends StateAdapter {
             counter++;
 
         context.ui.setDisplayText(sleepTime[counter]+"");
-        message= mHandler.obtainMessage();
-        Bundle bundle = new Bundle();
-        bundle.putInt(String.valueOf(0),sleepTime[counter]);
-        message.setData(bundle);
 
         if (slutning){
             context.ui.turnOffLED(3);

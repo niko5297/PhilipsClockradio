@@ -10,6 +10,9 @@ public class StateSnooze extends StateAdapter {
     private boolean isSnoozeOver;
 
 
+    //TODO: Spil alarm når snooze er over
+    //TODO: Ordne det med radio, så den kan spille en radiokanal ved alarm.
+
     Runnable snoozeRun = new Runnable() {
         @Override
         public void run() {
@@ -33,19 +36,12 @@ public class StateSnooze extends StateAdapter {
     @Override
     public void onEnterState(ContextClockradio context) {
         mContext = context;
-        context.ui.turnOnLED(3);
         snoozeRun.run();
     }
 
     @Override
     public void onExitState(ContextClockradio context) {
-        context.ui.turnOffLED(3);
 
     }
 
-    @Override
-    public void onClick_Snooze(ContextClockradio context) {
-        context.ui.turnOffLED(3);
-        context.setState(new StateStandby(context.getTime()));
-    }
 }
