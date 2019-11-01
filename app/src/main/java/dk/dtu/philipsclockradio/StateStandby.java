@@ -8,8 +8,8 @@ public class StateStandby extends StateAdapter {
     private Date mTime;
     private static Handler mHandler = new Handler();
     private ContextClockradio mContext;
-    private static StateAlarm stateAlarmAL1 = new StateAlarm(1);
-    private static StateAlarm stateAlarmAL2 = new StateAlarm(2);
+    //Doesnt matter if its 1 or 2
+    private static StateAlarm stateAlarm = new StateAlarm(1);
     private static boolean isAlarm1;
     private static boolean isAlarm2;
 
@@ -26,7 +26,7 @@ public class StateStandby extends StateAdapter {
                 long currentTime = mTime.getTime();
                 mTime.setTime(currentTime + 60000);
                 mContext.setTime(mTime);
-                if (isAlarm1 && stateAlarmAL1.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                if ((isAlarm1 || isAlarm2) && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
                     mContext.ui.turnOnTextBlink();
                 }
             } finally {
@@ -99,6 +99,7 @@ public class StateStandby extends StateAdapter {
             context.ui.turnOnLED(2);
             isAlarm1=true;
         }
+        context.ui.turnOffTextBlink();
     }
 
     @Override
@@ -111,11 +112,14 @@ public class StateStandby extends StateAdapter {
             context.ui.turnOnLED(5);
             isAlarm2=true;
         }
+        context.ui.turnOffTextBlink();
     }
 
     @Override
     public void onClick_Snooze(ContextClockradio context) {
-        stopClock();
-        context.setState(new StateSnooze());
+        if ((isAlarm1 || isAlarm2) && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))) {
+            context.ui.turnOffTextBlink();
+            context.setState(new StateSnooze());
+        }
     }
 }
