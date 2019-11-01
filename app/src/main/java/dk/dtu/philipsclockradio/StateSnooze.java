@@ -14,20 +14,21 @@ public class StateSnooze extends StateAdapter {
         @Override
         public void run() {
             try {
-                if (isSnoozeOver){
-                    isSnoozeOver=false;
+                if (isSnoozeOver) {
+                    isSnoozeOver = false;
                     mContext.setState(new StateStandby(mContext.getTime()));
 
                 }
 
-            }finally {
+            } finally {
                 isSnoozeOver = true;
                 handler.postDelayed(snoozeRun, 540000);
             }
         }
     };
 
-    StateSnooze(){}
+    StateSnooze() {
+    }
 
 
     @Override

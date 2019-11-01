@@ -14,27 +14,26 @@ public class StateAlarm extends StateAdapter {
     //TODO: Forbedre kode
 
 
-    StateAlarm(int alarm){
-        this.alarm=alarm;
+    StateAlarm(int alarm) {
+        this.alarm = alarm;
     }
 
     @Override
     public void onEnterState(ContextClockradio context) {
         time = resetTime(time);
-        mDisplayText = time.toString().substring(11,16);
+        mDisplayText = time.toString().substring(11, 16);
         context.ui.setDisplayText(mDisplayText);
-        if (alarm==1){
+        if (alarm == 1) {
             context.ui.turnOnLED(2);
 
             try {
                 if (alarmArray[0] != null) {
                     context.ui.setDisplayText(alarmArray[0].toString().substring(11, 16));
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             context.ui.turnOnLED(5);
 
             try {
@@ -42,7 +41,7 @@ public class StateAlarm extends StateAdapter {
                 if (alarmArray[1] != null) {
                     context.ui.setDisplayText(alarmArray[1].toString().substring(11, 16));
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -54,26 +53,23 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onClick_Min(ContextClockradio context) {
-        if (alarm==1) {
-            if (alarm1IsSet){
-                alarmArray[0].setTime(alarmArray[0].getTime()+ 60000);
+        if (alarm == 1) {
+            if (alarm1IsSet) {
+                alarmArray[0].setTime(alarmArray[0].getTime() + 60000);
                 mDisplayText = alarmArray[0].toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
-            }
-            else {
+            } else {
                 time.setTime(time.getTime() + 60000);
                 mDisplayText = time.toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
                 alarmArray[0] = time;
             }
-        }
-        else {
-            if (alarm2IsSet){
-                alarmArray[1].setTime(alarmArray[1].getTime()+ 60000);
+        } else {
+            if (alarm2IsSet) {
+                alarmArray[1].setTime(alarmArray[1].getTime() + 60000);
                 mDisplayText = alarmArray[1].toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
-            }
-            else {
+            } else {
                 time.setTime(time.getTime() + 60000);
                 mDisplayText = time.toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
@@ -84,26 +80,23 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onClick_Hour(ContextClockradio context) {
-        if (alarm==1) {
-            if (alarm1IsSet){
-                alarmArray[0].setTime(alarmArray[0].getTime()+ 3600000);
+        if (alarm == 1) {
+            if (alarm1IsSet) {
+                alarmArray[0].setTime(alarmArray[0].getTime() + 3600000);
                 mDisplayText = alarmArray[0].toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
-            }
-            else {
+            } else {
                 time.setTime(time.getTime() + 3600000);
                 mDisplayText = time.toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
                 alarmArray[0] = time;
             }
-        }
-        else {
-            if (alarm2IsSet){
-                alarmArray[1].setTime(alarmArray[1].getTime()+ 3600000);
+        } else {
+            if (alarm2IsSet) {
+                alarmArray[1].setTime(alarmArray[1].getTime() + 3600000);
                 mDisplayText = alarmArray[1].toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
-            }
-            else {
+            } else {
                 time.setTime(time.getTime() + 3600000);
                 mDisplayText = time.toString().substring(11, 16);
                 context.ui.setDisplayText(mDisplayText);
@@ -116,22 +109,22 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onClick_AL1(ContextClockradio context) {
-        alarm1IsSet =true;
+        alarm1IsSet = true;
         context.setState(new StateStandby(context.getTime()));
     }
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
-        alarm2IsSet =true;
+        alarm2IsSet = true;
         context.setState(new StateStandby(context.getTime()));
 
     }
 
-    public Date getAlarmTime(){
-        if (alarm1IsSet){
+    public Date getAlarmTime() {
+        if (alarm1IsSet) {
             return alarmArray[0];
         }
-        if (alarm2IsSet){
+        if (alarm2IsSet) {
             return alarmArray[1];
         }
         return null;
@@ -145,7 +138,7 @@ public class StateAlarm extends StateAdapter {
     --------------------------------SUPPORT METHODS------------------------------
      */
 
-    private Date resetTime(Date date){
+    private Date resetTime(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 0);
