@@ -13,6 +13,8 @@ public class StateAlarm extends StateAdapter {
 
     //TODO: Forbedre kode
 
+    //TODO: Find en måde hvorpå at man kan retunere alarm tiden uden brug af boolean.
+
 
     StateAlarm(int alarm) {
         this.alarm = alarm;
@@ -23,6 +25,7 @@ public class StateAlarm extends StateAdapter {
         time = resetTime(time);
         mDisplayText = time.toString().substring(11, 16);
         context.ui.setDisplayText(mDisplayText);
+        context.ui.turnOffLED(1);
         if (alarm == 1) {
             context.ui.turnOnLED(2);
 
@@ -128,6 +131,14 @@ public class StateAlarm extends StateAdapter {
             return alarmArray[1];
         }
         return null;
+    }
+
+    public int alarmSet(){
+        if (alarm1IsSet || alarm2IsSet){
+            return 1;
+        }
+        else
+            return 0;
     }
 
 

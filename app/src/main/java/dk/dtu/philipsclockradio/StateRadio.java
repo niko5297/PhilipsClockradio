@@ -33,7 +33,7 @@ public class StateRadio extends StateAdapter {
         if (radioType == 1) {
             context.ui.setDisplayText(nuværendeFMFrekvens + "");
         } else {
-            context.ui.setDisplayText(nuværendeFMFrekvens + "");
+            context.ui.setDisplayText(nuværendeAMFrekvens + "");
         }
 
     }

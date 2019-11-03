@@ -9,13 +9,16 @@ public class StateStandby extends StateAdapter {
     private static Handler mHandler = new Handler();
     private ContextClockradio mContext;
     //Doesnt matter if its 1 or 2
-    private static StateAlarm stateAlarm = new StateAlarm(1);
-    private static boolean isAlarm1;
-    private static boolean isAlarm2;
+    private StateAlarm stateAlarm = new StateAlarm(1);
+    private boolean isAlarm1;
+    private boolean isAlarm2;
+    private int alarmIndicator = 0;
+
 
     StateStandby(Date time){
         mTime = time;
     }
+
 
     //Opdaterer hvert 60. sekund med + 1 min til tiden
     Runnable mSetTime = new Runnable() {
@@ -26,10 +29,17 @@ public class StateStandby extends StateAdapter {
                 long currentTime = mTime.getTime();
                 mTime.setTime(currentTime + 60000);
                 mContext.setTime(mTime);
-                if ((isAlarm1 || isAlarm2) && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+
+                if (alarmIndicator==2 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
                     mContext.ui.turnOnTextBlink();
                 }
-            } finally {
+                if (alarmIndicator == 1 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                    mContext.setState(new StateRadio());
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            finally {
                 mHandler.postDelayed(mSetTime, 60000);
             }
         }
@@ -49,6 +59,8 @@ public class StateStandby extends StateAdapter {
     public void onEnterState(ContextClockradio context) {
         //Lokal context oprettet for at Runnable kan få adgang
         mContext = context;
+        alarmIndicator = stateAlarm.alarmSet();
+        System.out.println(alarmIndicator);
 
         context.updateDisplayTime();
         if(!context.isClockRunning){
@@ -91,35 +103,64 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onClick_AL1(ContextClockradio context) {
-        if (isAlarm1){
-            context.ui.turnOffLED(2);
-            isAlarm1=false;
-        }
-        else {
-            context.ui.turnOnLED(2);
-            isAlarm1=true;
+        alarmIndicator++;
+        switch (alarmIndicator){
+            case 1: {
+                context.ui.turnOnLED(1);
+                break;
+            }
+            case 2: {
+                context.ui.turnOffLED(1);
+                context.ui.turnOnLED(2);
+                break;
+            }
+            case 3: {
+                context.ui.turnOffLED(2);
+                alarmIndicator =0;
+                break;
+            }
         }
         context.ui.turnOffTextBlink();
     }
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
-        if (isAlarm2){
-            context.ui.turnOffLED(5);
-            isAlarm2=false;
-        }
-        else {
-            context.ui.turnOnLED(5);
-            isAlarm2=true;
+        alarmIndicator++;
+        switch (alarmIndicator){
+            case 1: {
+                context.ui.turnOnLED(4);
+                break;
+            }
+            case 2: {
+                context.ui.turnOffLED(4);
+                context.ui.turnOnLED(5);
+                break;
+            }
+            case 3: {
+                context.ui.turnOffLED(5);
+                alarmIndicator =0;
+                break;
+            }
         }
         context.ui.turnOffTextBlink();
     }
 
     @Override
     public void onClick_Snooze(ContextClockradio context) {
-        if ((isAlarm1 || isAlarm2) && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))) {
-            context.ui.turnOffTextBlink();
-            context.setState(new StateSnooze());
+        try {
+
+            if ((isAlarm1 || isAlarm2) && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))) {
+                context.ui.turnOffTextBlink();
+                context.setState(new StateSnooze());
+            }
+        }catch (NullPointerException e){
+            System.out.println("Alarm skal være sat for at kunne benytte snooze");
+            e.printStackTrace();
         }
+    }
+
+
+    public int getAlarmIndicator(){
+        return alarmIndicator;
     }
 }

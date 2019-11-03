@@ -7,14 +7,23 @@ public class StateSnooze extends StateAdapter {
 
     private static Handler handler = new Handler();
     private ContextClockradio mContext;
+    private StateStandby stateStandby;
     private boolean isSnoozeOver;
+    private int alarmIndicator;
+
+    //TODO: Alarmen skal ringe når den retuneres til StateStandby, så man kan benytte snooze igen.
 
 
     Runnable snoozeRun = new Runnable() {
         @Override
         public void run() {
             try {
-                if (isSnoozeOver) {
+                if (alarmIndicator == 1 & isSnoozeOver){
+                    isSnoozeOver = false;
+                    mContext.setState(new StateRadio());
+                }
+
+                if (alarmIndicator == 2 && isSnoozeOver) {
                     isSnoozeOver = false;
                     mContext.setState(new StateStandby(mContext.getTime()));
 
@@ -34,11 +43,13 @@ public class StateSnooze extends StateAdapter {
     @Override
     public void onEnterState(ContextClockradio context) {
         mContext = context;
+        alarmIndicator = stateStandby.getAlarmIndicator();
         snoozeRun.run();
     }
 
     @Override
     public void onExitState(ContextClockradio context) {
+
         context.ui.turnOnTextBlink();
     }
 

@@ -4,11 +4,11 @@ import android.os.Handler;
 
 public class StateSleep extends StateAdapter {
 
-    private static int[] sleepTime = {120, 90, 60, 30, 15};
-    private static int counter;
+    private int[] sleepTime = {120, 90, 60, 30, 15};
+    private int counter;
     private ContextClockradio mContext;
-    private static long currentTime;
-    private static long differenceTime;
+    private long currentTime;
+    private long differenceTime;
     private static Handler mHandler = new Handler();
     private boolean isSleepActive;
 
