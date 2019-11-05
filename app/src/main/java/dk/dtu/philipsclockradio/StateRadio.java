@@ -9,6 +9,8 @@ public class StateRadio extends StateAdapter {
 
     //TODO: Forbedre kode
 
+    //TODO: Man skal kunne snooze ved radio også
+
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */

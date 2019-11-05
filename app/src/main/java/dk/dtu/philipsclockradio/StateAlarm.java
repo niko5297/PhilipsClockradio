@@ -22,6 +22,7 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onEnterState(ContextClockradio context) {
+        context.ui.turnOnTextBlink();
         time = resetTime(time);
         mDisplayText = time.toString().substring(11, 16);
         context.ui.setDisplayText(mDisplayText);
@@ -52,6 +53,7 @@ public class StateAlarm extends StateAdapter {
 
     @Override
     public void onExitState(ContextClockradio context) {
+        context.ui.turnOffTextBlink();
     }
 
     @Override
@@ -122,6 +124,7 @@ public class StateAlarm extends StateAdapter {
         context.setState(new StateStandby(context.getTime()));
 
     }
+
 
     public Date getAlarmTime() {
         if (alarm1IsSet) {

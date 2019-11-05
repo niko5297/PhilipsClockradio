@@ -10,8 +10,7 @@ public class StateStandby extends StateAdapter {
     private ContextClockradio mContext;
     //Doesnt matter if its 1 or 2
     private StateAlarm stateAlarm = new StateAlarm(1);
-    private boolean isAlarm1;
-    private boolean isAlarm2;
+    private StateSnooze stateSnooze = new StateSnooze();
     private int alarmIndicator = 0;
 
 
@@ -59,7 +58,7 @@ public class StateStandby extends StateAdapter {
     public void onEnterState(ContextClockradio context) {
         //Lokal context oprettet for at Runnable kan få adgang
         mContext = context;
-        alarmIndicator = stateAlarm.alarmSet();
+        alarmIndicator = stateAlarm.alarmSet()+1;
         System.out.println(alarmIndicator);
 
         context.updateDisplayTime();
@@ -88,7 +87,6 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onLongClick_AL1(ContextClockradio context) {
-        isAlarm1=true;
         stopClock();
         context.setState(new StateAlarm(1));
 
@@ -96,7 +94,6 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onLongClick_AL2(ContextClockradio context) {
-        isAlarm2=true;
         stopClock();
         context.setState(new StateAlarm(2));
     }
@@ -149,11 +146,13 @@ public class StateStandby extends StateAdapter {
     public void onClick_Snooze(ContextClockradio context) {
         try {
 
-            if ((isAlarm1 || isAlarm2) && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))) {
+            if (alarmIndicator==2 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))
+                    || !stateSnooze.getSnoozeOver()) {
                 context.ui.turnOffTextBlink();
                 context.setState(new StateSnooze());
             }
-        }catch (NullPointerException e){
+        }catch (Exception e){
+            context.setState(new StateStandby(context.getTime()));
             System.out.println("Alarm skal være sat for at kunne benytte snooze");
             e.printStackTrace();
         }
