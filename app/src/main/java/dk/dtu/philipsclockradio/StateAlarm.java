@@ -15,6 +15,8 @@ public class StateAlarm extends StateAdapter {
 
     //TODO: Find en måde hvorpå at man kan retunere alarm tiden uden brug af boolean.
 
+    //TODO: Skal man kunne sætte 2 alarm på samme tid? altså f.eks. en kl 12:03 og en anden kl 12:04
+
 
     StateAlarm(int alarm) {
         this.alarm = alarm;
