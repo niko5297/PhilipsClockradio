@@ -11,12 +11,14 @@ public class StateRadio extends StateAdapter {
 
     //TODO: Man skal kunne snooze ved radio også
 
+    //TODO: Skal man kunne slå alarmen fra inde i radio?
+
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
 
     private int radioType = 1;
-    private double nuværendeFMFrekvens = 90.1;
+    private static double nuværendeFMFrekvens = 90.1;
     private double nuværendeAMFrekvens = 0;
     private int stationsNummer = 1;
     private boolean radiokanal = false;
