@@ -83,7 +83,6 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onClick_Power(ContextClockradio context) {
-        stopClock();
         context.setState(new StateRadio());
     }
 

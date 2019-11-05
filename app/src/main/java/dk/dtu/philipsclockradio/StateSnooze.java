@@ -8,7 +8,7 @@ public class StateSnooze extends StateAdapter {
     private static Handler handler = new Handler();
     private ContextClockradio mContext;
     private boolean isSnoozeOver = false;
-    private boolean snoozeBefore = false;
+    private static boolean snoozeBefore = false;
     private static int alarmIndicator;
 
     //FIXME: Man kan kun snooze når alarmen ringer, ikke når radioen spiller.
@@ -56,7 +56,7 @@ public class StateSnooze extends StateAdapter {
         snoozeBefore = true;
     }
 
-    public boolean getSnoozeOver(){
+    public static boolean getSnoozeOver(){
         return snoozeBefore;
     }
 

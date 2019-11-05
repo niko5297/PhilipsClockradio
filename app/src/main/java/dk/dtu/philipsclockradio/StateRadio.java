@@ -25,13 +25,36 @@ public class StateRadio extends StateAdapter {
     private static double[] gemteKanaler = {25.1, 97.5, 85.2, 90.5, 101.8, 50.2, 60.6, 79.2, 30.2, 75.2, 65.3, 44.3, 99.3, 76.5, 88.8, 55.3, 43.6, 78.3, 66.6, 44.1};
     private double[] radioKanaler = {101.5, 97.0, 103.2, 102.7, 99.4, 106.6, 90.1, 105, 100.6, 97.7, 107.2, 107.6, 96.1};
     private boolean isRadioPlaying = true;
+    private ContextClockradio mContext;
+    private StateAlarm stateAlarm = new StateAlarm(1);
+    private static int alarmIndicator;
+    private static boolean snoozeBefore = false;
 
     StateRadio() {
     }
 
+/*
+    Runnable radioAlarm = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                long currentTime = mTime.getTime();
+                mTime.setTime(currentTime + 60000);
+                mContext.setTime(mTime);
+
+            }finally {
+                mHandler.postDelayed(radioAlarm, 60000);
+            }
+        }
+    };
+
+ */
+
 
     @Override
     public void onEnterState(ContextClockradio context) {
+        mContext = context;
+        snoozeBefore = StateSnooze.getSnoozeOver();
         Arrays.sort(radioKanaler);
         context.ui.toggleRadioPlaying();
         if (radioType == 1) {
@@ -39,6 +62,8 @@ public class StateRadio extends StateAdapter {
         } else {
             context.ui.setDisplayText(nuværendeAMFrekvens + "");
         }
+        //radioAlarm.run();
+
 
     }
 
@@ -239,11 +264,20 @@ public class StateRadio extends StateAdapter {
 
     }
 
-
-
-
-
-
+    @Override
+    public void onClick_Snooze(ContextClockradio context) {
+        alarmIndicator = StateStandby.getAlarmIndicator();
+        try {
+            if (alarmIndicator==1 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(context.getTime().toString().substring(11, 16))
+                    || snoozeBefore) {
+                context.ui.setDisplayText(context.getTime().toString().substring(11, 16));
+                context.setState(new StateSnooze());
+            }
+        }catch (Exception e){
+            System.out.println("Alarm skal være sat for at kunne benytte snooze");
+            e.printStackTrace();
+        }
+    }
 
 
     /*
