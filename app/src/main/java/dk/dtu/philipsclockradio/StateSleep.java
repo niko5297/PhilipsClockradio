@@ -5,6 +5,7 @@ import android.os.Handler;
 public class StateSleep extends StateAdapter {
 
     private int[] sleepTime = {120, 90, 60, 30, 15};
+    private static int chosenSleepTime;
     private int counter;
     private ContextClockradio mContext;
     private long currentTime;
@@ -16,6 +17,7 @@ public class StateSleep extends StateAdapter {
 
     //TODO: Få sleep til at komme tilbage til StateStandby efter antal minutter. Dette skal kun ske i radio
 
+    //TODO: Skulle fungere nu
 
     StateSleep() {
     }
@@ -71,7 +73,7 @@ public class StateSleep extends StateAdapter {
 
         } else
             counter++;
-
+        chosenSleepTime = sleepTime[counter];
         context.ui.setDisplayText(sleepTime[counter] + "");
 
         if (slutning) {
@@ -79,5 +81,9 @@ public class StateSleep extends StateAdapter {
             context.ui.setDisplayText("OFF");
         }
 
+    }
+
+    public static int getChosenSleepTime() {
+        return chosenSleepTime;
     }
 }

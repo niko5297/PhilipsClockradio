@@ -1,5 +1,7 @@
 package dk.dtu.philipsclockradio;
 
+import android.os.Handler;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -20,6 +22,7 @@ public class StateRadio extends StateAdapter {
     private static int radioType = 1;
     private static double nuværendeFMFrekvens = 90.1;
     private static double nuværendeAMFrekvens = 530;
+    private static int sleepCounter;
     private int stationsNummer = 1;
     private boolean radiokanal = false;
     private static double[] gemteKanaler = {25.1, 97.5, 85.2, 90.5, 101.8, 50.2, 60.6, 79.2, 30.2, 75.2, 65.3, 44.3, 99.3, 76.5, 88.8, 55.3, 43.6, 78.3, 66.6, 44.1};
@@ -29,26 +32,27 @@ public class StateRadio extends StateAdapter {
     private StateAlarm stateAlarm = new StateAlarm(1);
     private static int alarmIndicator;
     private static boolean snoozeBefore = false;
+    private static Handler mHandler = new Handler();
 
     StateRadio() {
     }
 
-/*
-    Runnable radioAlarm = new Runnable() {
+    Runnable sleepCheck = new Runnable() {
         @Override
         public void run() {
             try {
-                long currentTime = mTime.getTime();
-                mTime.setTime(currentTime + 60000);
-                mContext.setTime(mTime);
+                if (sleepCounter==StateSleep.getChosenSleepTime()){
+                    mContext.setState(new StateStandby(mContext.getTime()));
+                }
+                sleepCounter++;
+
 
             }finally {
-                mHandler.postDelayed(radioAlarm, 60000);
+                mHandler.postDelayed(sleepCheck,60000);
             }
+
         }
     };
-
- */
 
 
     @Override
@@ -62,8 +66,7 @@ public class StateRadio extends StateAdapter {
         } else {
             context.ui.setDisplayText(nuværendeAMFrekvens + "");
         }
-        //radioAlarm.run();
-
+        sleepCheck.run();
 
     }
 
@@ -277,6 +280,11 @@ public class StateRadio extends StateAdapter {
             System.out.println("Alarm skal være sat for at kunne benytte snooze");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onClick_Sleep(ContextClockradio context) {
+        context.setState(new StateSleep());
     }
 
 

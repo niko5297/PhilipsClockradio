@@ -11,8 +11,7 @@ public class StateSnooze extends StateAdapter {
     private static boolean snoozeBefore = false;
     private static int alarmIndicator;
 
-    //FIXME: Man kan kun snooze når alarmen ringer, ikke når radioen spiller.
-
+    //TODO: Få klokken til at opdatere hvert minut.
 
     Runnable snoozeRun = new Runnable() {
         @Override
