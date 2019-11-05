@@ -17,12 +17,12 @@ public class StateRadio extends StateAdapter {
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
 
-    private int radioType = 1;
+    private static int radioType = 1;
     private static double nuværendeFMFrekvens = 90.1;
-    private double nuværendeAMFrekvens = 0;
+    private static double nuværendeAMFrekvens = 530;
     private int stationsNummer = 1;
     private boolean radiokanal = false;
-    private double[] gemteKanaler = {25.1, 97.5, 85.2, 90.5, 101.8, 50.2, 60.6, 79.2, 30.2, 75.2, 65.3, 44.3, 99.3, 76.5, 88.8, 55.3, 43.6, 78.3, 66.6, 44.1};
+    private static double[] gemteKanaler = {25.1, 97.5, 85.2, 90.5, 101.8, 50.2, 60.6, 79.2, 30.2, 75.2, 65.3, 44.3, 99.3, 76.5, 88.8, 55.3, 43.6, 78.3, 66.6, 44.1};
     private double[] radioKanaler = {101.5, 97.0, 103.2, 102.7, 99.4, 106.6, 90.1, 105, 100.6, 97.7, 107.2, 107.6, 96.1};
     private boolean isRadioPlaying = true;
 
@@ -54,13 +54,21 @@ public class StateRadio extends StateAdapter {
 
     @Override
     public void onClick_Power(ContextClockradio context) {
+        radioType++;
+        if (radioType>2){
+            radioType=1;
+        }
         if (radioType == 1) {
-            radioType = 4;
+            context.ui.setDisplayText(nuværendeFMFrekvens + "");
         } else {
-            radioType = 1;
+            context.ui.setDisplayText(nuværendeAMFrekvens + "");
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onClick_Min(ContextClockradio context) {
         if (radioType == 1) {
@@ -73,11 +81,19 @@ public class StateRadio extends StateAdapter {
             }
             context.ui.setDisplayText(nuværendeFMFrekvens + "");
         }
-        if (radioType == 4) {
-
+        if (radioType == 2) {
+            nuværendeAMFrekvens = nuværendeAMFrekvens + 10;
+            if (nuværendeAMFrekvens > 1700) {
+                nuværendeAMFrekvens = 530;
+            }
+            context.ui.setDisplayText(nuværendeAMFrekvens + "");
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onClick_Hour(ContextClockradio context) {
         if (radioType == 1) {
@@ -90,11 +106,20 @@ public class StateRadio extends StateAdapter {
             }
             context.ui.setDisplayText(nuværendeFMFrekvens + "");
         }
-        if (radioType == 4) {
+        if (radioType == 2) {
+            nuværendeAMFrekvens = nuværendeAMFrekvens - 10;
+            if (nuværendeAMFrekvens < 530) {
+                nuværendeAMFrekvens = 1700;
+            }
+            context.ui.setDisplayText(nuværendeAMFrekvens + "");
 
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onLongClick_Hour(ContextClockradio context) {
         double distance = Math.abs(radioKanaler[0] - nuværendeFMFrekvens);
@@ -118,11 +143,15 @@ public class StateRadio extends StateAdapter {
 
             context.ui.setDisplayText(nuværendeFMFrekvens + "");
         }
-        if (radioType == 4) {
+        if (radioType == 2) {
 
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onLongClick_Min(ContextClockradio context) {
         double distance = Math.abs(radioKanaler[0] - nuværendeFMFrekvens);
@@ -146,11 +175,15 @@ public class StateRadio extends StateAdapter {
 
             context.ui.setDisplayText(nuværendeFMFrekvens + "");
         }
-        if (radioType == 4) {
+        if (radioType == 2) {
 
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onLongClick_Preset(ContextClockradio context) {
         if (isRadioPlaying) {
@@ -176,6 +209,10 @@ public class StateRadio extends StateAdapter {
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onClick_Preset(ContextClockradio context) {
 

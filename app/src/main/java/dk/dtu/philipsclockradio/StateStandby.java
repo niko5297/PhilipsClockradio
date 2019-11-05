@@ -14,6 +14,7 @@ public class StateStandby extends StateAdapter {
     private static int alarmIndicator = 0;
     private boolean snoozeBefore = false;
 
+    //FIXME: Hvis man sætter Alarmen og ikke ændre hvilken alarm der skal ringe, så starter radioen og ikke alarmen.
 
     StateStandby(Date time){
         mTime = time;
