@@ -11,7 +11,8 @@ public class StateStandby extends StateAdapter {
     //Doesnt matter if its 1 or 2
     private StateAlarm stateAlarm = new StateAlarm(1);
     private StateSnooze stateSnooze = new StateSnooze();
-    private int alarmIndicator = 0;
+    private static int alarmIndicator = 0;
+    private boolean snoozeBefore = false;
 
 
     StateStandby(Date time){
@@ -58,6 +59,7 @@ public class StateStandby extends StateAdapter {
     public void onEnterState(ContextClockradio context) {
         //Lokal context oprettet for at Runnable kan få adgang
         mContext = context;
+        snoozeBefore = stateSnooze.getSnoozeOver();
         alarmIndicator = stateAlarm.alarmSet()+1;
         System.out.println(alarmIndicator);
 
@@ -65,6 +67,11 @@ public class StateStandby extends StateAdapter {
         if(!context.isClockRunning){
             startClock();
         }
+    }
+
+    @Override
+    public void onExitState(ContextClockradio context) {
+        snoozeBefore = false;
     }
 
     @Override
@@ -100,6 +107,7 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onClick_AL1(ContextClockradio context) {
+        snoozeBefore = false;
         alarmIndicator++;
         switch (alarmIndicator){
             case 1: {
@@ -122,6 +130,7 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
+        snoozeBefore = false;
         alarmIndicator++;
         switch (alarmIndicator){
             case 1: {
@@ -147,7 +156,7 @@ public class StateStandby extends StateAdapter {
         try {
 
             if (alarmIndicator==2 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))
-                    || !stateSnooze.getSnoozeOver()) {
+                    || snoozeBefore) {
                 context.ui.turnOffTextBlink();
                 context.setState(new StateSnooze());
             }
@@ -159,7 +168,7 @@ public class StateStandby extends StateAdapter {
     }
 
 
-    public int getAlarmIndicator(){
+    public static int getAlarmIndicator(){
         return alarmIndicator;
     }
 }

@@ -7,14 +7,9 @@ public class StateSnooze extends StateAdapter {
 
     private static Handler handler = new Handler();
     private ContextClockradio mContext;
-    private StateStandby stateStandby;
-    private StateAlarm stateAlarm;
-    private boolean isSnoozeOver;
-    private int alarmIndicator;
-
-    //TODO: Alarmen skal ringe når den retuneres til StateStandby, så man kan benytte snooze igen.
-
-    //TODO Find en ny måde hvorpå at du kan komme igennem runnable første gang uden at hoppe ind. Nu hvor du kan snooze igen, se statestandby
+    private boolean isSnoozeOver = false;
+    private boolean snoozeBefore = false;
+    private static int alarmIndicator;
 
 
     Runnable snoozeRun = new Runnable() {
@@ -22,11 +17,14 @@ public class StateSnooze extends StateAdapter {
         public void run() {
             try {
                 if (alarmIndicator == 1 && isSnoozeOver){
+                    alarmIndicator = 3;
                     isSnoozeOver = false;
                     mContext.setState(new StateRadio());
                 }
 
                 if (alarmIndicator == 2 && isSnoozeOver) {
+                    alarmIndicator = 3;
+                    System.out.println("Herinde");
                     isSnoozeOver = false;
                     mContext.ui.turnOnTextBlink();
                     mContext.setState(new StateStandby(mContext.getTime()));
@@ -35,7 +33,7 @@ public class StateSnooze extends StateAdapter {
 
             } finally {
                 isSnoozeOver = true;
-                handler.postDelayed(snoozeRun, 1000);
+                handler.postDelayed(snoozeRun, 54000);
             }
         }
     };
@@ -47,17 +45,17 @@ public class StateSnooze extends StateAdapter {
     @Override
     public void onEnterState(ContextClockradio context) {
         mContext = context;
-        stateStandby = new StateStandby(context.getTime());
-        alarmIndicator = stateStandby.getAlarmIndicator();
+        alarmIndicator = StateStandby.getAlarmIndicator();
         snoozeRun.run();
     }
 
     @Override
     public void onExitState(ContextClockradio context) {
+        snoozeBefore = true;
     }
 
     public boolean getSnoozeOver(){
-        return isSnoozeOver;
+        return snoozeBefore;
     }
 
 }
