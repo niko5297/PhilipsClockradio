@@ -11,6 +11,8 @@ public class StateRadio extends StateAdapter {
 
     //TODO: Forbedre kode
 
+    //TODO: Få en alarm til at ringe inde i radio
+
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */

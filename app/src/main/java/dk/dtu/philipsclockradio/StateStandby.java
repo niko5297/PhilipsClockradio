@@ -13,8 +13,8 @@ public class StateStandby extends StateAdapter {
     private StateSnooze stateSnooze = new StateSnooze();
     private static int alarmIndicator = 0;
     private boolean snoozeBefore = false;
-
-    //FIXME: Hvis man sætter Alarmen og ikke ændre hvilken alarm der skal ringe, så starter radioen og ikke alarmen.
+    private static Date[] alarmArray = new Date[2];
+    private boolean alarmRinging = false;
 
     StateStandby(Date time){
         mTime = time;
@@ -31,10 +31,18 @@ public class StateStandby extends StateAdapter {
                 mTime.setTime(currentTime + 60000);
                 mContext.setTime(mTime);
 
-                if (alarmIndicator==2 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                if (alarmIndicator==2 && alarmArray[0].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
                     mContext.ui.turnOnTextBlink();
+                    alarmRinging = true;
                 }
-                if (alarmIndicator == 1 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                if (alarmIndicator==2 && alarmArray[1].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                    mContext.ui.turnOnTextBlink();
+                    alarmRinging = true;
+                }
+                if (alarmIndicator == 1 && alarmArray[0].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                    mContext.setState(new StateRadio());
+                }
+                if (alarmIndicator == 1 && alarmArray[1].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
                     mContext.setState(new StateRadio());
                 }
             }catch (NullPointerException e){
@@ -60,6 +68,7 @@ public class StateStandby extends StateAdapter {
     public void onEnterState(ContextClockradio context) {
         //Lokal context oprettet for at Runnable kan få adgang
         mContext = context;
+        alarmArray = stateAlarm.getAlarmTime();
         snoozeBefore = stateSnooze.getSnoozeOver();
         alarmIndicator = stateAlarm.alarmSet()+1;
 
@@ -101,47 +110,60 @@ public class StateStandby extends StateAdapter {
     @Override
     public void onClick_AL1(ContextClockradio context) {
         snoozeBefore = false;
-        alarmIndicator++;
-        switch (alarmIndicator){
-            case 1: {
-                context.ui.turnOnLED(1);
-                break;
-            }
-            case 2: {
-                context.ui.turnOffLED(1);
-                context.ui.turnOnLED(2);
-                break;
-            }
-            case 3: {
-                context.ui.turnOffLED(2);
-                alarmIndicator =0;
-                break;
+        if (alarmRinging){
+            context.ui.turnOffLED(2);
+            context.ui.turnOffTextBlink();
+            alarmRinging = false;
+
+        }
+        else {
+            alarmIndicator++;
+            switch (alarmIndicator) {
+                case 1: {
+                    context.ui.turnOnLED(1);
+                    break;
+                }
+                case 2: {
+                    context.ui.turnOffLED(1);
+                    context.ui.turnOnLED(2);
+                    break;
+                }
+                case 3: {
+                    context.ui.turnOffLED(2);
+                    alarmIndicator = 0;
+                    break;
+                }
             }
         }
-        context.ui.turnOffTextBlink();
     }
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
         snoozeBefore = false;
-        alarmIndicator++;
-        switch (alarmIndicator){
-            case 1: {
-                context.ui.turnOnLED(4);
-                break;
-            }
-            case 2: {
-                context.ui.turnOffLED(4);
-                context.ui.turnOnLED(5);
-                break;
-            }
-            case 3: {
-                context.ui.turnOffLED(5);
-                alarmIndicator =0;
-                break;
+        if (alarmRinging){
+            context.ui.turnOffLED(5);
+            context.ui.turnOffTextBlink();
+            alarmRinging = false;
+        }
+        else {
+            alarmIndicator++;
+            switch (alarmIndicator) {
+                case 1: {
+                    context.ui.turnOnLED(4);
+                    break;
+                }
+                case 2: {
+                    context.ui.turnOffLED(4);
+                    context.ui.turnOnLED(5);
+                    break;
+                }
+                case 3: {
+                    context.ui.turnOffLED(5);
+                    alarmIndicator = 0;
+                    break;
+                }
             }
         }
-        context.ui.turnOffTextBlink();
     }
 
     @Override

@@ -15,10 +15,6 @@ public class StateSleep extends StateAdapter {
 
     //TODO: Forbedre kode
 
-    //TODO: Få sleep til at komme tilbage til StateStandby efter antal minutter. Dette skal kun ske i radio
-
-    //TODO: Skulle fungere nu
-
     StateSleep() {
     }
 
