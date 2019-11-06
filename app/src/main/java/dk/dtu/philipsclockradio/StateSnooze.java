@@ -10,8 +10,7 @@ public class StateSnooze extends StateAdapter {
     private boolean isSnoozeOver = false;
     private static boolean snoozeBefore = false;
     private static int alarmIndicator;
-
-    //TODO: Få klokken til at opdatere hvert minut.
+    private int snoozeTimer = 0;
 
     //TODO: Lav kommentarer
 
@@ -19,23 +18,25 @@ public class StateSnooze extends StateAdapter {
         @Override
         public void run() {
             try {
-                if (alarmIndicator == 1 && isSnoozeOver){
+                mContext.ui.setDisplayText(mContext.getTime().toString().substring(11,16));
+                if (alarmIndicator == 1 && isSnoozeOver && snoozeTimer==9){
                     alarmIndicator = 3;
                     isSnoozeOver = false;
                     mContext.setState(new StateRadio());
                 }
 
-                if (alarmIndicator == 2 && isSnoozeOver) {
+                if (alarmIndicator == 2 && isSnoozeOver && snoozeTimer==9) {
                     alarmIndicator = 3;
                     isSnoozeOver = false;
                     mContext.ui.turnOnTextBlink();
                     mContext.setState(new StateStandby(mContext.getTime()));
 
                 }
+                snoozeTimer++;
 
             } finally {
                 isSnoozeOver = true;
-                handler.postDelayed(snoozeRun, 54000);
+                handler.postDelayed(snoozeRun, 60000);
             }
         }
     };

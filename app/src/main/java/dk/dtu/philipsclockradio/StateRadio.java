@@ -12,8 +12,6 @@ public class StateRadio extends StateAdapter {
 
     //TODO: Forbedre kode
 
-    //TODO: Kunne slå alarmen fra i radio
-
     //TODO: Lav kommentarer
 
     /**
@@ -31,10 +29,11 @@ public class StateRadio extends StateAdapter {
     private boolean isRadioPlaying = true;
     private ContextClockradio mContext;
     private StateAlarm stateAlarm = new StateAlarm(1);
-    private static int alarmIndicator;
+    private static int alarmIndicator, alarmIndicator2;
     private static boolean snoozeBefore = false;
     private static Handler mHandler = new Handler();
     private static Date[] alarmArray = new Date[2];
+    private static boolean alarmRinging;
 
     StateRadio() {
     }
@@ -63,9 +62,11 @@ public class StateRadio extends StateAdapter {
 
                 if (alarmIndicator==2 && alarmArray[0].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
                     mContext.ui.turnOnTextBlink();
+                    alarmRinging = true;
                 }
-                if (alarmIndicator==2 && alarmArray[1].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                if (alarmIndicator2==2 && alarmArray[1].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
                     mContext.ui.turnOnTextBlink();
+                    alarmRinging = true;
                 }
             }catch (NullPointerException e){
                 e.printStackTrace();
@@ -82,6 +83,7 @@ public class StateRadio extends StateAdapter {
         mContext = context;
         snoozeBefore = StateSnooze.getSnoozeOver();
         alarmIndicator = StateStandby.getAlarmIndicator()+1;
+        alarmIndicator2 = StateStandby.getAlarmIndicator2()+1;
         alarmArray = stateAlarm.getAlarmTime();
         Arrays.sort(radioKanaler);
         context.ui.toggleRadioPlaying();
@@ -100,6 +102,7 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onExitState(ContextClockradio context) {
         context.ui.toggleRadioPlaying();
+        mHandler.removeCallbacks(alarmCheck);
     }
 
     @Override
@@ -297,8 +300,7 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onClick_Snooze(ContextClockradio context) {
         try {
-            if (alarmIndicator==1 && stateAlarm.getAlarmTime().toString().substring(11, 16).equals(context.getTime().toString().substring(11, 16))
-                    || snoozeBefore) {
+            if (StateStandby.isAlarmRinging() || snoozeBefore || alarmRinging) {
                 context.ui.setDisplayText(context.getTime().toString().substring(11, 16));
                 context.setState(new StateSnooze());
             }
@@ -316,11 +318,13 @@ public class StateRadio extends StateAdapter {
     @Override
     public void onClick_AL1(ContextClockradio context) {
         context.ui.turnOffTextBlink();
+        alarmRinging = false;
     }
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
         context.ui.turnOffTextBlink();
+        alarmRinging = false;
     }
 
     /*

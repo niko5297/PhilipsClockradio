@@ -15,8 +15,6 @@ public class StateAlarm extends StateAdapter {
 
     //TODO: Lav kommentarer
 
-    //TODO: Find en måde hvorpå at man kan retunere alarm tiden uden brug af boolean.
-
 
     StateAlarm(int alarm) {
         this.alarm = alarm;
