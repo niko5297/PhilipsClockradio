@@ -62,7 +62,6 @@ public class StateStandby extends StateAdapter {
         mContext = context;
         snoozeBefore = stateSnooze.getSnoozeOver();
         alarmIndicator = stateAlarm.alarmSet()+1;
-        System.out.println(alarmIndicator);
 
         context.updateDisplayTime();
         if(!context.isClockRunning){

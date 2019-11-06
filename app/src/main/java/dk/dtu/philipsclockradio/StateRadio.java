@@ -11,10 +11,6 @@ public class StateRadio extends StateAdapter {
 
     //TODO: Forbedre kode
 
-    //TODO: Man skal kunne snooze ved radio også
-
-    //TODO: Skal man kunne slå alarmen fra inde i radio?
-
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
@@ -44,6 +40,7 @@ public class StateRadio extends StateAdapter {
                 if (sleepCounter==StateSleep.getChosenSleepTime()){
                     mContext.setState(new StateStandby(mContext.getTime()));
                 }
+                System.out.println(StateSleep.getChosenSleepTime());
                 sleepCounter++;
 
 
@@ -66,7 +63,9 @@ public class StateRadio extends StateAdapter {
         } else {
             context.ui.setDisplayText(nuværendeAMFrekvens + "");
         }
-        sleepCheck.run();
+        if (StateSleep.getChosenSleepTime()!=0){
+            sleepCheck.run();
+        }
 
     }
 

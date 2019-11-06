@@ -25,7 +25,6 @@ public class StateSnooze extends StateAdapter {
 
                 if (alarmIndicator == 2 && isSnoozeOver) {
                     alarmIndicator = 3;
-                    System.out.println("Herinde");
                     isSnoozeOver = false;
                     mContext.ui.turnOnTextBlink();
                     mContext.setState(new StateStandby(mContext.getTime()));

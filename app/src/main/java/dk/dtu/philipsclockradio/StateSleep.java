@@ -29,9 +29,7 @@ public class StateSleep extends StateAdapter {
         public void run() {
             try {
                 differenceTime = System.currentTimeMillis();
-                //System.out.println(differenceTime);
                 if (currentTime + 5000 < differenceTime && !isSleepActive) {
-                    //System.out.println("Du er nået hertil");
                     mContext.setState(new StateRadio());
                     isSleepActive = true;
                 }
