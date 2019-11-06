@@ -11,15 +11,15 @@ public class StateAlarm extends StateAdapter {
     private static boolean alarm1IsSet, alarm2IsSet;
     private int alarm;
 
-    //TODO: Forbedre kode
-
-    //TODO: Lav kommentarer
-
-
     StateAlarm(int alarm) {
         this.alarm = alarm;
     }
 
+    /**
+     * When this State start, the chosen alarm will be set to 00:00
+     * If the current alarm has already been set, then display that
+     * @param context
+     */
     @Override
     public void onEnterState(ContextClockradio context) {
         context.ui.turnOnTextBlink();
@@ -58,6 +58,11 @@ public class StateAlarm extends StateAdapter {
         context.ui.turnOffTextBlink();
     }
 
+    /**
+     * This method increments the alarm clock by 1 minute
+     * It checks which alarm you are currently trying to set
+     * @param context
+     */
     @Override
     public void onClick_Min(ContextClockradio context) {
         try {
@@ -89,6 +94,11 @@ public class StateAlarm extends StateAdapter {
         }
     }
 
+    /**
+     * This method increments the alarm clock by 1 hour
+     * It checks which alarm you are currently trying to set
+     * @param context
+     */
     @Override
     public void onClick_Hour(ContextClockradio context) {
         try {
@@ -135,6 +145,10 @@ public class StateAlarm extends StateAdapter {
 
     }
 
+
+    /*
+    ----------------------------------PUBLIC METHODS------------------------------------
+     */
 
     public Date[] getAlarmTime() {
         return alarmArray;

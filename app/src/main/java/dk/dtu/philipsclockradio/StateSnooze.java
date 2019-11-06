@@ -12,8 +12,10 @@ public class StateSnooze extends StateAdapter {
     private static int alarmIndicator;
     private int snoozeTimer = 0;
 
-    //TODO: Lav kommentarer
 
+    /**
+     * This runnable will update a counter each minute and when 9 minutes have gone, new state is set.
+     */
     Runnable snoozeRun = new Runnable() {
         @Override
         public void run() {
@@ -47,6 +49,7 @@ public class StateSnooze extends StateAdapter {
 
     @Override
     public void onEnterState(ContextClockradio context) {
+        snoozeTimer = 0;
         mContext = context;
         alarmIndicator = StateStandby.getAlarmIndicator();
         snoozeRun.run();

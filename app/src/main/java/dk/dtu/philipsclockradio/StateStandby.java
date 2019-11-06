@@ -21,9 +21,12 @@ public class StateStandby extends StateAdapter {
         mTime = time;
     }
 
-    //TODO: Lav kommentarer
 
-    //Opdaterer hvert 60. sekund med + 1 min til tiden
+    /**
+     * This runnable will update the timer every minute
+     * Each minute it will check the alarm time matches the current time
+     * If true the alarm either rings or changes state acording to which alarm type has been set
+     */
     Runnable mSetTime = new Runnable() {
 
         @Override
@@ -32,7 +35,6 @@ public class StateStandby extends StateAdapter {
                 long currentTime = mTime.getTime();
                 mTime.setTime(currentTime + 60000);
                 mContext.setTime(mTime);
-                System.out.println(alarmIndicator);
                     if (alarmIndicator == 1 && alarmArray[0].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))) {
                         mContext.ui.turnOffLED(1);
                         alarmRinging = true;
@@ -118,6 +120,11 @@ public class StateStandby extends StateAdapter {
         context.setState(new StateAlarm(2));
     }
 
+    /**
+     * This method changes the alarm type.
+     * It also stops the alarm if its ringing.
+     * @param context
+     */
     @Override
     public void onClick_AL1(ContextClockradio context) {
         snoozeBefore = false;
@@ -148,10 +155,15 @@ public class StateStandby extends StateAdapter {
                     break;
                 }
             }
-            System.out.println(alarmIndicator);
         }
     }
 
+
+    /**
+     * This method changes the alarm type.
+     * It also stops the alarm if its ringing.
+     * @param context
+     */
     @Override
     public void onClick_AL2(ContextClockradio context) {
         snoozeBefore = false;
@@ -184,6 +196,10 @@ public class StateStandby extends StateAdapter {
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onClick_Snooze(ContextClockradio context) {
         try {
@@ -198,6 +214,12 @@ public class StateStandby extends StateAdapter {
             e.printStackTrace();
         }
     }
+
+
+
+    /*
+    ---------------------------------------PUBLIC METHODS-----------------------------------------------
+     */
 
 
     public static int getAlarmIndicator(){

@@ -13,14 +13,13 @@ public class StateSleep extends StateAdapter {
     private static Handler mHandler = new Handler();
     private boolean isSleepActive;
 
-    //TODO: Forbedre kode
-
-    //TODO: Lav kommentarer
-
     StateSleep() {
     }
 
-
+    /**
+     * This runnable checks every second if you have been idling for 5 seconds
+     * If true you'll return to radio.
+     */
     Runnable mTime = new Runnable() {
 
         @Override
@@ -59,6 +58,13 @@ public class StateSleep extends StateAdapter {
         //System.out.println(message);
     }
 
+    /**
+     * When you click on the sleep display current sleep timer
+     * Click again and move one position in the array and display that
+     * If end of array have been reached, turn off LED
+     * Save the chosen sleeptimer to be used by the radio.
+     * @param context
+     */
     @Override
     public void onClick_Sleep(ContextClockradio context) {
         currentTime = System.currentTimeMillis();
@@ -78,6 +84,12 @@ public class StateSleep extends StateAdapter {
         }
 
     }
+
+
+    /*
+    -----------------------------------PUBLIC METHODS----------------------------------
+     */
+
 
     public static int getChosenSleepTime() {
         return chosenSleepTime;

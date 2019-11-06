@@ -9,11 +9,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class StateRadio extends StateAdapter {
-
-    //TODO: Forbedre kode
-
-    //TODO: Lav kommentarer
-
     /**
      * http://tunenet.dk/radio-tv/radiokanaler?start=1
      */
@@ -38,6 +33,10 @@ public class StateRadio extends StateAdapter {
     StateRadio() {
     }
 
+    /**
+     * This runnable will run if sleep is active, to check if the sleep timer has been reached
+     * If true, return to StateStandby
+     */
     Runnable sleepCheck = new Runnable() {
         @Override
         public void run() {
@@ -55,6 +54,10 @@ public class StateRadio extends StateAdapter {
         }
     };
 
+    /**
+     * This runnable will run to check if an alarm has reached the current time
+     * If true, the alarm will ring
+     */
     Runnable alarmCheck = new Runnable() {
         @Override
         public void run() {
@@ -78,6 +81,15 @@ public class StateRadio extends StateAdapter {
     };
 
 
+    /**
+     * Upon entering RadioState.
+     * Starts by defining variable from other classes
+     * Sorting the radiochannel array.
+     * Check the radio type and displays that.
+     * Runs sleep runnable if sleep is active
+     * Runs alarm runnable to check if an alarm should ring
+     * @param context
+     */
     @Override
     public void onEnterState(ContextClockradio context) {
         mContext = context;
@@ -110,6 +122,10 @@ public class StateRadio extends StateAdapter {
         context.setState(new StateStandby(context.getTime()));
     }
 
+    /**
+     * This method changes the radiotype from FM to AM and opposite
+     * @param context
+     */
     @Override
     public void onClick_Power(ContextClockradio context) {
         radioType++;
@@ -124,7 +140,8 @@ public class StateRadio extends StateAdapter {
     }
 
     /**
-     *
+     * This method increments FM radio by 0.1 MHz and displays that
+     * This method also increments AM radio by 10 KHz and displays that
      * @param context
      */
     @Override
@@ -149,7 +166,8 @@ public class StateRadio extends StateAdapter {
     }
 
     /**
-     *
+     * This method decrements FM radio by 0.1 MHz and displays that
+     * This method also decrements AM radio by 10 KHz and displays that
      * @param context
      */
     @Override
@@ -175,7 +193,8 @@ public class StateRadio extends StateAdapter {
     }
 
     /**
-     *
+     * This method jumps to the next radiochannel that is lower than your current frequency
+     * Since there are no AM radiochannels that functionality haven't been implemented
      * @param context
      */
     @Override
@@ -207,7 +226,8 @@ public class StateRadio extends StateAdapter {
     }
 
     /**
-     *
+     * This method jumps to the next radiochannel that is higher than your current frequency
+     * Since there are no AM radiochannels that functionality haven't been implemented
      * @param context
      */
     @Override
@@ -239,7 +259,8 @@ public class StateRadio extends StateAdapter {
     }
 
     /**
-     *
+     * This method lets you save a chosen radiochannel by holding present.
+     * It displays the current position.
      * @param context
      */
     @Override
@@ -268,7 +289,8 @@ public class StateRadio extends StateAdapter {
     }
 
     /**
-     *
+     * This method saves the chosen radiochannel in that specific position
+     * It then switches back where you left.
      * @param context
      */
     @Override
@@ -297,6 +319,11 @@ public class StateRadio extends StateAdapter {
 
     }
 
+    /**
+     * This method lets you snooze the radio, if an alarm is ringing or just have.
+     * It switches state and then returns after 9 minutes.
+     * @param context
+     */
     @Override
     public void onClick_Snooze(ContextClockradio context) {
         try {
