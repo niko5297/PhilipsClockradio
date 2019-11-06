@@ -20,6 +20,10 @@ public class StateStandby extends StateAdapter {
         mTime = time;
     }
 
+    //TODO: Lav kommentarer
+
+    //TODO: Hvis man sætter alarmen og ændre den til radio og så sætter en ny alarm, så starter den almindelige alarm og ikke radio
+
 
     //Opdaterer hvert 60. sekund med + 1 min til tiden
     Runnable mSetTime = new Runnable() {
@@ -40,9 +44,11 @@ public class StateStandby extends StateAdapter {
                     alarmRinging = true;
                 }
                 if (alarmIndicator == 1 && alarmArray[0].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                   mContext.ui.turnOffLED(1);
                     mContext.setState(new StateRadio());
                 }
                 if (alarmIndicator == 1 && alarmArray[1].toString().substring(11, 16).equals(mContext.getTime().toString().substring(11, 16))){
+                    mContext.ui.turnOffLED(4);
                     mContext.setState(new StateRadio());
                 }
             }catch (NullPointerException e){
@@ -70,7 +76,7 @@ public class StateStandby extends StateAdapter {
         mContext = context;
         alarmArray = stateAlarm.getAlarmTime();
         snoozeBefore = stateSnooze.getSnoozeOver();
-        alarmIndicator = stateAlarm.alarmSet()+1;
+        if (alarmIndicator==0) alarmIndicator = stateAlarm.alarmSet()+1;
 
         context.updateDisplayTime();
         if(!context.isClockRunning){

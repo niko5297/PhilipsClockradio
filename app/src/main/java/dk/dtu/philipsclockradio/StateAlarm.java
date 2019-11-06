@@ -13,9 +13,9 @@ public class StateAlarm extends StateAdapter {
 
     //TODO: Forbedre kode
 
-    //TODO: Find en måde hvorpå at man kan retunere alarm tiden uden brug af boolean.
+    //TODO: Lav kommentarer
 
-    //TODO: Skal man kunne sætte 2 alarm på samme tid? altså f.eks. en kl 12:03 og en anden kl 12:04
+    //TODO: Find en måde hvorpå at man kan retunere alarm tiden uden brug af boolean.
 
 
     StateAlarm(int alarm) {
@@ -28,9 +28,8 @@ public class StateAlarm extends StateAdapter {
         time = resetTime(time);
         mDisplayText = time.toString().substring(11, 16);
         context.ui.setDisplayText(mDisplayText);
-        context.ui.turnOffLED(1);
-        context.ui.turnOffLED(4);
         if (alarm == 1) {
+            context.ui.turnOffLED(1);
             context.ui.turnOnLED(2);
 
             try {
@@ -41,6 +40,7 @@ public class StateAlarm extends StateAdapter {
                 e.printStackTrace();
             }
         } else {
+            context.ui.turnOffLED(4);
             context.ui.turnOnLED(5);
 
             try {

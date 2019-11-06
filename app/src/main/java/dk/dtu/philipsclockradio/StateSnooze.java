@@ -13,6 +13,8 @@ public class StateSnooze extends StateAdapter {
 
     //TODO: Få klokken til at opdatere hvert minut.
 
+    //TODO: Lav kommentarer
+
     Runnable snoozeRun = new Runnable() {
         @Override
         public void run() {

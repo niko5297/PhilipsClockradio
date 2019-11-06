@@ -15,6 +15,8 @@ public class StateSleep extends StateAdapter {
 
     //TODO: Forbedre kode
 
+    //TODO: Lav kommentarer
+
     StateSleep() {
     }
 
